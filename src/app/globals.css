@@ -1,0 +1,130 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Force light theme - removed dark mode media query */
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer components {
+  /* Fomal Theme Typography Customization */
+  .prose-fomal {
+    @apply prose prose-lg max-w-none text-slate-600;
+  }
+
+  /* Headings with Diamond Icon */
+  .prose-fomal h1,
+  .prose-fomal h2,
+  .prose-fomal h3 {
+    @apply relative pl-8 font-bold text-slate-800 tracking-tight scroll-mt-24;
+  }
+
+  .prose-fomal h1::before,
+  .prose-fomal h2::before,
+  .prose-fomal h3::before {
+    content: "◈";
+    @apply absolute left-0 top-0 text-blue-500 text-xl leading-8 opacity-80;
+    /* Adjust vertical align as needed */
+  }
+
+  /* Blockquotes: Info Box Style */
+  .prose-fomal blockquote {
+    @apply not-italic bg-blue-50/60 border-l-4 border-blue-500 rounded-r-lg px-6 py-5 my-8 shadow-sm relative overflow-hidden text-slate-700;
+  }
+  .prose-fomal blockquote p:first-of-type {
+    @apply mt-0 before:content-none after:content-none;
+  }
+
+  /* Inline Code: Pink Theme */
+  .prose-fomal :not(pre) > code {
+    @apply text-pink-600 bg-pink-50 px-1.5 py-0.5 mx-0.5 rounded border border-pink-100/50 font-mono text-[0.85em] font-medium align-middle;
+    /* Remove default backticks */
+  }
+  .prose-fomal :not(pre) > code::before,
+  .prose-fomal :not(pre) > code::after {
+    content: none !important;
+  }
+
+  /* Code Blocks: Standard Style (Managed via JS) */
+  .prose-fomal pre {
+    @apply p-0 m-0 bg-transparent overflow-x-auto;
+  }
+
+  /* Tables */
+  .prose-fomal table {
+    @apply w-full border-separate border-spacing-0 border border-slate-300 rounded-xl overflow-hidden my-8 text-sm shadow-[0_8px_16px_-4px_rgba(0,0,0,0.05)];
+  }
+  .prose-fomal thead {
+    @apply bg-slate-50;
+  }
+  .prose-fomal th {
+    @apply px-4 py-3.5 text-left font-bold text-slate-900 border-b border-r border-slate-300;
+  }
+  .prose-fomal td {
+    @apply px-4 py-3 border-b border-r border-slate-300 text-slate-600;
+  }
+  /* Remove right border for the last column */
+  .prose-fomal th:last-child,
+  .prose-fomal td:last-child {
+    @apply border-r-0;
+  }
+  /* Table Alignment Support */
+  .prose-fomal th[align="center"],
+  .prose-fomal td[align="center"] {
+    @apply text-center;
+  }
+  .prose-fomal th[align="right"],
+  .prose-fomal td[align="right"] {
+    @apply text-right;
+  }
+  .prose-fomal tr:last-child td {
+    @apply border-b-0;
+  }
+  .prose-fomal tr:hover td {
+    @apply bg-blue-50/30 transition-colors duration-200;
+  }
+
+  /* Lists */
+  .prose-fomal ul {
+    @apply list-disc marker:text-blue-400 pl-6;
+  }
+  .prose-fomal ol {
+    @apply list-decimal marker:text-blue-600 marker:font-semibold pl-6;
+  }
+  .prose-fomal li {
+    @apply my-1.5 pl-1;
+  }
+
+  /* Links */
+  .prose-fomal a {
+    @apply text-blue-600 no-underline decoration-blue-300 decoration-2 transition-all font-medium border-b border-blue-200/0 hover:border-blue-300/100;
+  }
+  .prose-fomal a:hover {
+    @apply text-blue-700;
+  }
+
+  /* Images */
+  .prose-fomal img {
+    @apply rounded-xl shadow-md border border-slate-100 my-8 w-full h-auto;
+  }
+
+  /* Math */
+  .prose-fomal .math-display {
+    @apply overflow-x-auto py-4 px-2 my-4 bg-slate-50/50 rounded-lg text-center;
+  }
+}

@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Overwrite blog detail page",
+			"type": "shell",
+			"command": "Copy-Item",
+			"args": [
+				"-LiteralPath",
+				"f:\\Develop\\Web\\yl-tavern\\src\\app\\blog\\[...slug]\\page_new.tsx",
+				"-Destination",
+				"f:\\Develop\\Web\\yl-tavern\\src\\app\\blog\\[...slug]\\page.tsx",
+				"-Force"
+			],
+			"isBackground": false,
+			"group": "build"
+		}
+	]
+}
