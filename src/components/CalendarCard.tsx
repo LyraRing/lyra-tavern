@@ -29,13 +29,13 @@ export default function CalendarCard() {
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
       <div className="text-center font-bold text-gray-800 mb-4 flex justify-between items-center">
-        <span className="text-sm text-gray-400 cursor-pointer hover:text-blue-500">
+        <span className="text-sm text-gray-400 cursor-pointer hover:text-amber-500">
           ◀
         </span>
         <span>
           {currentDate.getFullYear()}年 {currentDate.getMonth() + 1}月
         </span>
-        <span className="text-sm text-gray-400 cursor-pointer hover:text-blue-500">
+        <span className="text-sm text-gray-400 cursor-pointer hover:text-amber-500">
           ▶
         </span>
       </div>
@@ -60,7 +60,7 @@ export default function CalendarCard() {
             className={`h-8 flex items-center justify-center rounded-full transition-colors 
                 ${
                   d === today
-                    ? "bg-blue-500 text-white shadow-md shadow-blue-500/30 font-bold"
+                    ? "bg-amber-500 text-white shadow-md shadow-amber-500/30 font-bold"
                     : "text-gray-600 hover:bg-gray-100 cursor-pointer"
                 }`}
           >

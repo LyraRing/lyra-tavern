@@ -97,6 +97,22 @@ async function parseMarkdownFile(
 ): Promise<ContentItem> {
   const fileContents = fs.readFileSync(filePath, "utf8");
 
+  if (!fileContents || !fileContents.trim()) {
+    console.warn(`Warning: Empty markdown file found at ${filePath}`);
+    return {
+      slug,
+      title: slug,
+      date: new Date().toISOString(),
+      description: "",
+      tags: [],
+      wordCount: 0,
+      readingTime: 0,
+      excerpt: "",
+      rawContent: "",
+      content: "<p>Empty content</p>",
+    };
+  }
+
   // 使用 gray-matter 解析 Frontmatter 和内容
   const matterResult = matter(fileContents);
 

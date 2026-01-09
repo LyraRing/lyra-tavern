@@ -59,7 +59,7 @@ const TreeNodeView = ({
           href={node.path}
           className={`block py-1.5 pr-2 pl-3 text-sm rounded-r-md border-l-2 transition-colors ${
             isActive
-              ? "border-blue-500 bg-blue-50 text-blue-700 font-medium"
+              ? "border-amber-500 bg-amber-50 text-amber-700 font-medium"
               : "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300"
           }`}
           style={{ marginLeft: `${depth * 12}px` }}

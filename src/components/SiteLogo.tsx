@@ -4,7 +4,7 @@ export default function SiteLogo() {
   return (
     <h1 className="text-xl font-bold text-blue-600">
       <Link href="/" className="hover:opacity-90">
-        MySite
+        天琴座酒馆
       </Link>
     </h1>
   );

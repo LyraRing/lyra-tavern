@@ -19,7 +19,7 @@ export default function MobileDocsNav({ docs }: { docs: ContentItem[] }) {
       {/* Mobile Toggle Button */}
       <button
         type="button"
-        className="lg:hidden fixed bottom-6 right-6 z-50 p-4 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all active:scale-95"
+        className="lg:hidden fixed bottom-6 right-6 z-50 p-4 bg-amber-500 text-white rounded-full shadow-lg hover:bg-amber-600 transition-all active:scale-95"
         onClick={() => setIsOpen(true)}
         aria-label="Open Documentation Menu"
       >

@@ -89,8 +89,8 @@ export default function NavBar() {
                     href={item.href}
                     className={`flex items-center gap-1.5 px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
                       isActive(item.href)
-                        ? "text-blue-600 bg-blue-50"
-                        : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                        ? "text-amber-600 bg-amber-50"
+                        : "text-gray-700 hover:text-amber-600 hover:bg-amber-50"
                     }`}
                   >
                     <span>{item.icon}</span>
@@ -103,8 +103,8 @@ export default function NavBar() {
                         item.children.some(
                           (c) => "href" in c && isActive(c.href)
                         )
-                          ? "text-blue-600 bg-blue-50"
-                          : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                          ? "text-amber-600 bg-amber-50"
+                          : "text-gray-700 hover:text-amber-600 hover:bg-amber-50"
                       }`}
                       aria-expanded={openDropdown === item.label}
                     >
@@ -142,8 +142,8 @@ export default function NavBar() {
                               href={child.href}
                               className={`flex items-center gap-2 px-4 py-2.5 transition-colors ${
                                 isActive(child.href)
-                                  ? "text-blue-600 bg-blue-50"
-                                  : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                                  ? "text-amber-600 bg-amber-50"
+                                  : "text-gray-700 hover:text-amber-600 hover:bg-amber-50"
                               }`}
                             >
                               <span>{child.icon}</span>
@@ -209,8 +209,8 @@ export default function NavBar() {
                     href={item.href}
                     className={`flex items-center gap-2 px-4 py-3 rounded-lg transition-colors ${
                       isActive(item.href)
-                        ? "text-blue-600 bg-blue-50"
-                        : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                        ? "text-amber-600 bg-amber-50"
+                        : "text-gray-700 hover:text-amber-600 hover:bg-amber-50"
                     }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
@@ -219,7 +219,7 @@ export default function NavBar() {
                   </Link>
                 ) : (
                   <details className="group">
-                    <summary className="flex items-center gap-2 px-4 py-3 rounded-lg text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer list-none">
+                    <summary className="flex items-center gap-2 px-4 py-3 rounded-lg text-gray-700 hover:text-amber-600 hover:bg-amber-50 transition-colors cursor-pointer list-none">
                       <span>{item.icon}</span>
                       <span className="flex-1">{item.label}</span>
                       <svg
@@ -244,8 +244,8 @@ export default function NavBar() {
                               href={child.href}
                               className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-colors ${
                                 isActive(child.href)
-                                  ? "text-blue-600 bg-blue-50"
-                                  : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                                  ? "text-amber-600 bg-amber-50"
+                                  : "text-gray-600 hover:text-amber-600 hover:bg-amber-50"
                               }`}
                               onClick={() => setMobileMenuOpen(false)}
                             >

@@ -22,109 +22,293 @@ body {
 }
 
 @layer components {
-  /* Fomal Theme Typography Customization */
+  /* ========================================= */
+  /* PHYCAT CARAMEL THEME IMPLEMENTATION       */
+  /* ========================================= */
+
+  /* Base Typography */
   .prose-fomal {
-    @apply prose prose-lg max-w-none text-slate-600;
+    @apply prose prose-lg max-w-none text-[#333333];
+    font-family: "HarmonyOS Sans SC", "Microsoft YaHei", sans-serif;
+  }
+  /* BOLD TEXT: High Contrast Dark Color + Subtle Pop */
+  .prose-fomal strong {
+    @apply font-bold text-[#f59e0b] inline-block transition-all duration-200; /* Adjusted to match image (Amber 500) */
+  }
+  .prose-fomal strong:hover {
+    @apply scale-105;
+    text-shadow: 1px 1px 0px rgba(251, 191, 36, 0.2);
+  }
+  /* HEADINGS */
+  /* H1: Clean, large, dark grey with Hover Gradient */
+  .prose-fomal h1 {
+    @apply text-3xl md:text-4xl font-bold text-[#333333] mt-12 mb-8 pb-4 border-b-0 relative transition-all duration-500 bg-clip-text decoration-0;
+    background-image: linear-gradient(
+      to right,
+      #333333,
+      #333333
+    ); /* Default static */
+    background-size: 200% auto;
+  }
+  .prose-fomal h1:hover {
+    background-image: linear-gradient(to right, #f59e0b, #d97706, #f59e0b);
+    color: transparent;
+    animation: gradient-move 2s linear infinite;
+  }
+  .prose-fomal h1::after {
+    content: "";
+    @apply absolute bottom-0 left-0 w-[40px] h-[4px] rounded-full bg-amber-400 transition-all duration-500 ease-out;
+    background: linear-gradient(90deg, #fcd34d, #f59e0b);
+  }
+  .prose-fomal h1:hover::after {
+    width: 100%;
+  }
+  .prose-fomal h1::before {
+    content: none;
+  } /* Remove Diamond */
+
+  /* H2: Soft Gradient Pill Style with Dynamic Hover */
+  .prose-fomal h2 {
+    @apply text-2xl md:text-3xl font-bold !text-white mt-12 mb-6 px-6 py-2 rounded-full inline-block shadow-sm transition-all duration-300;
+    /* Normal State - Golden/Amber Gradient (Image 1) */
+    background: linear-gradient(to right, #ffba24, #ffab00);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    border: none;
+  }
+  .prose-fomal h2:hover {
+    @apply shadow-md scale-[1.02] !text-white;
+    /* Hover State - Deeper/Saturated Orange (Image 2) - No white highlight */
+    background: linear-gradient(to right, #ffab00, #ff9100);
+    animation: none; /* Disable shimmering */
+    filter: none; /* Ensure no brightness filter */
+  }
+  .prose-fomal h2::before {
+    content: none;
+  }
+  /* Fix: Reset link styles inside H2 to prevent white background/color change */
+  .prose-fomal h2 a {
+    @apply !text-white !border-none !no-underline !bg-transparent;
+  }
+  .prose-fomal h2 a:hover {
+    @apply !text-white !bg-transparent !border-none !p-0 !m-0;
   }
 
-  /* Headings with Diamond Icon */
-  .prose-fomal h1,
-  .prose-fomal h2,
+  /* H3: Simple with Animated Left Marker */
   .prose-fomal h3 {
-    @apply relative pl-8 font-bold text-slate-800 tracking-tight scroll-mt-24;
+    @apply text-xl md:text-2xl font-bold text-[#b45309] mt-8 mb-4 pl-4 relative transition-all duration-300 border-none;
   }
-
-  .prose-fomal h1::before,
-  .prose-fomal h2::before,
   .prose-fomal h3::before {
-    content: "◈";
-    @apply absolute left-0 top-0 text-blue-500 text-xl leading-8 opacity-80;
-    /* Adjust vertical align as needed */
+    content: "";
+    @apply absolute left-0 top-1/2 -translate-y-1/2 w-[5px] h-[60%] bg-amber-500 rounded-full transition-all duration-300 ease-out;
+  }
+  .prose-fomal h3:hover {
+    @apply pl-6 text-amber-600 cursor-pointer;
+  }
+  .prose-fomal h3:hover::before {
+    @apply h-[70%] w-[7px] bg-amber-600;
+  }
+  .prose-fomal h3 span {
+    @apply transition-colors duration-300;
   }
 
-  /* Blockquotes: Info Box Style */
+  /* H4: Circle Marker Style */
+  .prose-fomal h4 {
+    @apply text-lg md:text-xl font-bold text-amber-600 mt-6 mb-3 flex items-center gap-2;
+  }
+  .prose-fomal h4::before {
+    content: "";
+    @apply inline-block w-2.5 h-2.5 rounded-full border border-amber-600 transition-all duration-300;
+  }
+  .prose-fomal h4:hover::before {
+    @apply transform scale-125 bg-amber-600 shadow-[0_0_0_4px_rgba(251,191,36,0.3)];
+  }
+
+  /* H5 & H6: Smaller Markers */
+  .prose-fomal h5 {
+    @apply text-base font-bold text-amber-700 mt-4 mb-2 flex items-center gap-2;
+  }
+  .prose-fomal h5::before {
+    content: "";
+    @apply inline-block w-2 h-2 rounded-full border-2 border-amber-600 bg-white transition-all duration-300;
+  }
+  .prose-fomal h5:hover::before {
+    @apply scale-125 bg-amber-600 shadow-[0_0_0_3px_rgba(251,191,36,0.2)];
+  }
+
+  .prose-fomal h6 {
+    @apply text-sm font-bold text-amber-800 mt-4 mb-2 flex items-center gap-2;
+  }
+  .prose-fomal h6::before {
+    content: "-";
+    @apply text-amber-600 font-bold mr-1;
+  }
+
+  /* BLOCKQUOTES - "Sparkle" Style with Dynamic Hover */
   .prose-fomal blockquote {
-    @apply not-italic bg-blue-50/60 border-l-4 border-blue-500 rounded-r-lg px-6 py-5 my-8 shadow-sm relative overflow-hidden text-slate-700;
+    @apply relative not-italic my-8 py-5 pr-6 pl-12 rounded-2xl text-[#555] shadow-sm overflow-hidden border-none transition-all duration-300 transform;
+    background-color: #fffbeb; /* Amber 50 */
+    box-shadow: none; /* Reset old shadow */
+  }
+  .prose-fomal blockquote:hover {
+    @apply scale-[1.02] shadow-md bg-amber-50;
+    box-shadow: 0 10px 30px -10px rgba(245, 158, 11, 0.2);
+  }
+  .prose-fomal blockquote::before {
+    content: "✨";
+    @apply absolute left-4 top-5 text-xl leading-none select-none transition-transform duration-500;
+  }
+  .prose-fomal blockquote:hover::before {
+    @apply rotate-180 scale-125;
+  }
+  /* Remove old elements */
+  .prose-fomal blockquote::after {
+    content: none;
   }
   .prose-fomal blockquote p:first-of-type {
-    @apply mt-0 before:content-none after:content-none;
+    @apply mt-0;
   }
 
-  /* Inline Code: Pink Theme */
+  /* TABLES */
+  .prose-fomal table {
+    @apply w-full border-separate border-spacing-0 border border-amber-300 rounded-lg overflow-hidden my-8 text-sm shadow-sm transition-all duration-300;
+  }
+  .prose-fomal table:hover {
+    @apply shadow-lg scale-[1.01];
+  }
+  .prose-fomal thead {
+    @apply bg-[#fffbeb]; /* Amber 50 */
+  }
+  .prose-fomal th {
+    @apply px-4 py-3.5 text-left font-bold text-[#b45309] border-b border-amber-200; /* Amber 700 text */
+  }
+  .prose-fomal td {
+    @apply px-4 py-3 border-b border-amber-100 text-[#333] transition-colors duration-200;
+  }
+  .prose-fomal tr:last-child td {
+    @apply border-b-0;
+  }
+  /* Row Hover Effect: Amber Background + Full Outline Simulation */
+  .prose-fomal tr:hover td {
+    @apply bg-[#fffbeb] text-[#d97706] cursor-default; /* Amber-50 bg, Amber-600 text */
+    /* Simulate borders using inset box-shadow to prevent layout shift */
+    box-shadow: inset 0 1px 0 0 #fbbf24, inset 0 -1px 0 0 #fbbf24; /* Top & Bottom Amber-400 */
+  }
+  .prose-fomal tr:hover td:first-child {
+    box-shadow: inset 1px 1px 0 0 #fbbf24, inset 0 -1px 0 0 #fbbf24; /* Add Left Border */
+  }
+  .prose-fomal tr:hover td:last-child {
+    box-shadow: inset 0 1px 0 0 #fbbf24, inset -1px -1px 0 0 #fbbf24; /* Add Right Border */
+  }
+
+  /* LISTS */
+  .prose-fomal ul {
+    @apply list-disc marker:text-amber-400 pl-6;
+  }
+  .prose-fomal ol {
+    @apply list-decimal marker:text-amber-600 marker:font-bold pl-6;
+  }
+  .prose-fomal li {
+    @apply my-1.5 pl-1;
+  }
+  /* Checkboxes */
+  .prose-fomal li input[type="checkbox"] {
+    @apply accent-amber-500 mr-2;
+  }
+
+  /* LINKS */
+  .prose-fomal a {
+    @apply text-amber-600 no-underline border-b border-amber-300/50 transition-all font-medium;
+  }
+  .prose-fomal a:hover {
+    @apply text-amber-700 border-amber-500 bg-amber-50 rounded px-1 -mx-1;
+  }
+
+  /* INLINE CODE */
   .prose-fomal :not(pre) > code {
-    @apply text-pink-600 bg-pink-50 px-1.5 py-0.5 mx-0.5 rounded border border-pink-100/50 font-mono text-[0.85em] font-medium align-middle;
-    /* Remove default backticks */
+    @apply text-[#b45309] bg-[#fffbeb] px-1.5 py-0.5 mx-0.5 rounded border border-amber-200/50 font-mono text-[0.85em] font-medium align-middle transition-all duration-200 inline-block;
+  }
+  .prose-fomal :not(pre) > code:hover {
+    @apply scale-105 bg-amber-100 shadow-sm -translate-y-[1px];
   }
   .prose-fomal :not(pre) > code::before,
   .prose-fomal :not(pre) > code::after {
     content: none !important;
   }
 
-  /* Code Blocks: Standard Style (Managed via JS) */
-  .prose-fomal pre {
-    @apply p-0 m-0 bg-transparent overflow-x-auto;
-  }
-
-  /* Tables */
-  .prose-fomal table {
-    @apply w-full border-separate border-spacing-0 border border-slate-300 rounded-xl overflow-hidden my-8 text-sm shadow-[0_8px_16px_-4px_rgba(0,0,0,0.05)];
-  }
-  .prose-fomal thead {
-    @apply bg-slate-50;
-  }
-  .prose-fomal th {
-    @apply px-4 py-3.5 text-left font-bold text-slate-900 border-b border-r border-slate-300;
-  }
-  .prose-fomal td {
-    @apply px-4 py-3 border-b border-r border-slate-300 text-slate-600;
-  }
-  /* Remove right border for the last column */
-  .prose-fomal th:last-child,
-  .prose-fomal td:last-child {
-    @apply border-r-0;
-  }
-  /* Table Alignment Support */
-  .prose-fomal th[align="center"],
-  .prose-fomal td[align="center"] {
-    @apply text-center;
-  }
-  .prose-fomal th[align="right"],
-  .prose-fomal td[align="right"] {
-    @apply text-right;
-  }
-  .prose-fomal tr:last-child td {
-    @apply border-b-0;
-  }
-  .prose-fomal tr:hover td {
-    @apply bg-blue-50/30 transition-colors duration-200;
-  }
-
-  /* Lists */
-  .prose-fomal ul {
-    @apply list-disc marker:text-blue-400 pl-6;
-  }
-  .prose-fomal ol {
-    @apply list-decimal marker:text-blue-600 marker:font-semibold pl-6;
-  }
-  .prose-fomal li {
-    @apply my-1.5 pl-1;
-  }
-
-  /* Links */
-  .prose-fomal a {
-    @apply text-blue-600 no-underline decoration-blue-300 decoration-2 transition-all font-medium border-b border-blue-200/0 hover:border-blue-300/100;
-  }
-  .prose-fomal a:hover {
-    @apply text-blue-700;
-  }
-
-  /* Images */
+  /* IMAGES */
   .prose-fomal img {
-    @apply rounded-xl shadow-md border border-slate-100 my-8 w-full h-auto;
+    @apply rounded-xl shadow-md my-8 w-full h-auto object-center;
   }
 
-  /* Math */
-  .prose-fomal .math-display {
-    @apply overflow-x-auto py-4 px-2 my-4 bg-slate-50/50 rounded-lg text-center;
+  /* DIVIDER (HR) */
+  .prose-fomal hr {
+    @apply my-12 border-0 h-[2px] bg-gradient-to-r from-transparent via-amber-300 to-transparent relative overflow-visible;
   }
+  .prose-fomal hr::after {
+    content: "✨";
+    @apply absolute top-1/2 -translate-y-1/2 text-amber-400 text-sm opacity-0 pointer-events-none;
+    left: 0;
+  }
+  .prose-fomal hr:hover {
+    @apply bg-gradient-to-r from-transparent via-amber-400 to-transparent h-[3px];
+  }
+  .prose-fomal hr:hover::after {
+    animation: slideSnowflake 2s linear infinite;
+  }
+
+  /* Math Blocks */
+  .prose-fomal .math-display {
+    @apply overflow-x-auto py-4 px-2 my-4 bg-amber-50/30 rounded-lg text-center border border-amber-100/50;
+  }
+}
+
+/* ========================================= */
+/* GLOBAL ANIMATIONS & OVERRIDES             */
+/* ========================================= */
+
+@keyframes gradient-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes slideSnowflake {
+  0% {
+    left: 0;
+    opacity: 1;
+    transform: translateY(-50%) rotate(0deg);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #fffbeb;
+}
+::-webkit-scrollbar-thumb {
+  background: #fcd34d;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #f59e0b;
+}
+
+/* Selection Color */
+::selection {
+  background: #fef3c7; /* amber-100 */
+  color: #92400e; /* amber-800 */
 }

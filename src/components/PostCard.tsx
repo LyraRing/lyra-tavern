@@ -83,7 +83,7 @@ export default function PostCard({ post, direction = "row" }: PostCardProps) {
         </div>
 
         <h2
-          className={`font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2 ${
+          className={`font-bold text-gray-900 mb-3 group-hover:text-amber-600 transition-colors line-clamp-2 ${
             direction === "row" ? "text-2xl" : "text-xl"
           }`}
         >
@@ -112,7 +112,7 @@ export default function PostCard({ post, direction = "row" }: PostCardProps) {
 
           <Link
             href={`/blog/${post.slug}`}
-            className="text-blue-600 font-medium text-sm hover:translate-x-1 transition-transform inline-flex items-center gap-1"
+            className="text-amber-600 font-medium text-sm hover:translate-x-1 transition-transform inline-flex items-center gap-1"
           >
             Read Article <span>→</span>
           </Link>

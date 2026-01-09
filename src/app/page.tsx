@@ -13,13 +13,13 @@ export default async function Home() {
       {/* Hero Section */}
       <section className="relative h-[85vh] flex items-center justify-center overflow-hidden bg-slate-50">
         {/* Background Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-indigo-50 opacity-90"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-white to-orange-50 opacity-90"></div>
 
         {/* Abstract Background Pattern - Subtle dots or grid */}
         <div className="absolute inset-0 bg-[url('/patterns/grid.svg')] opacity-[0.03]"></div>
 
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto space-y-8 animate-fade-in-up">
-          <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 drop-shadow-sm tracking-tight pb-2">
+          <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-amber-600 to-orange-600 drop-shadow-sm tracking-tight pb-2">
             Lyra Tavern
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 font-light max-w-2xl mx-auto leading-relaxed">
@@ -31,13 +31,13 @@ export default async function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
             <Link
               href="/blog"
-              className="px-8 py-3 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-medium transition-all hover:scale-105 shadow-lg shadow-blue-500/30"
+              className="px-8 py-3 rounded-full bg-amber-600 hover:bg-amber-500 text-white font-medium transition-all hover:scale-105 shadow-lg shadow-amber-500/30"
             >
               开始阅读
             </Link>
             <Link
               href="/about"
-              className="px-8 py-3 rounded-full border border-gray-300 hover:border-blue-600 text-gray-600 hover:text-blue-600 font-medium transition-all bg-white/50 hover:bg-white"
+              className="px-8 py-3 rounded-full border border-gray-300 hover:border-amber-600 text-gray-600 hover:text-amber-600 font-medium transition-all bg-white/50 hover:bg-white"
             >
               了解更多
             </Link>
@@ -126,7 +126,7 @@ export default async function Home() {
             </div>
             <Link
               href="/blog"
-              className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 hover:gap-2 transition-all"
+              className="text-amber-600 hover:text-amber-700 font-medium flex items-center gap-1 hover:gap-2 transition-all"
             >
               查看全部 posts <span className="text-xl">→</span>
             </Link>
@@ -149,10 +149,10 @@ export default async function Home() {
       </section>
 
       {/* Quote / Decoration */}
-      <section className="py-20 bg-blue-50 text-slate-700 text-center relative overflow-hidden">
+      <section className="py-20 bg-amber-50 text-slate-700 text-center relative overflow-hidden">
         {/* Decorative background element */}
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-blue-100 rounded-full blur-3xl opacity-50"></div>
-        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-purple-100 rounded-full blur-3xl opacity-50"></div>
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-amber-100 rounded-full blur-3xl opacity-50"></div>
+        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-orange-100 rounded-full blur-3xl opacity-50"></div>
 
         <div className="container mx-auto px-4 relative z-10">
           <blockquote className="text-2xl md:text-3xl font-serif italic text-slate-800 opacity-80 max-w-3xl mx-auto">

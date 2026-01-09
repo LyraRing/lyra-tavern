@@ -42,13 +42,25 @@ export default function Search() {
     if (isOpen && allItems.length === 0) {
       setLoading(true);
       fetch("/api/search")
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) throw new Error("Search API failed");
+          return res.text(); // First get text to check validation
+        })
+        .then((text) => {
+          if (!text || !text.trim()) return []; // Handle empty or whitespace response
+          try {
+            return JSON.parse(text);
+          } catch (e) {
+            console.error("Failed to parse search results:", e);
+            return [];
+          }
+        })
         .then((data) => {
           setAllItems(data);
           setLoading(false);
         })
         .catch((err) => {
-          console.error("Failed to fetch search index", err);
+          console.error("Search fetch error:", err);
           setLoading(false);
         });
     }
@@ -172,19 +184,19 @@ export default function Search() {
                         router.push(item.slug);
                         closeSearch();
                       }}
-                      className="cursor-pointer px-4 py-3 hover:bg-blue-50 transition-colors group flex items-start gap-3"
+                      className="cursor-pointer px-4 py-3 hover:bg-amber-50 transition-colors group flex items-start gap-3"
                     >
                       <div
                         className={`mt-1 shrink-0 w-6 h-6 flex items-center justify-center rounded-lg text-xs font-bold ring-1 overflow-hidden ${
                           item.type === "blog"
-                            ? "bg-blue-100 text-blue-600 ring-blue-200"
+                            ? "bg-amber-100 text-amber-600 ring-amber-200"
                             : "bg-green-100 text-green-600 ring-green-200"
                         }`}
                       >
                         {item.type === "blog" ? "文" : "档"}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-gray-900 group-hover:text-blue-700 truncate">
+                        <h4 className="font-medium text-gray-900 group-hover:text-amber-700 truncate">
                           {item.title}
                         </h4>
                         <p className="text-sm text-gray-500 truncate mt-0.5">

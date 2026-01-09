@@ -1,12 +1,61 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 export default function MarkdownContent({ content }: { content: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+
+  const closeLightbox = () => setLightboxSrc(null);
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeLightbox();
+    };
+    if (lightboxSrc) {
+      window.addEventListener("keydown", handleEsc);
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+      document.body.style.overflow = "unset";
+    };
+  }, [lightboxSrc]);
 
   useEffect(() => {
     if (!containerRef.current) return;
+
+    // --- Image Processing ---
+    const images = containerRef.current.querySelectorAll("img");
+    images.forEach((img) => {
+      img.loading = "lazy";
+      Object.assign(img.style, {
+        maxWidth: "85%",
+        maxHeight: "600px",
+        // Ensure aspect ratio is preserved
+        width: "auto",
+        height: "auto",
+        margin: "2rem auto",
+        display: "block",
+        borderRadius: "1rem",
+        boxShadow: "0 0 20px rgba(245, 158, 11, 0.4)",
+        cursor: "zoom-in",
+        transition: "all 0.3s ease",
+      });
+      img.onmouseenter = () => {
+        img.style.transform = "scale(1.02)";
+        img.style.boxShadow = "0 0 30px rgba(245, 158, 11, 0.6)";
+      };
+      img.onmouseleave = () => {
+        img.style.transform = "scale(1.0)";
+        img.style.boxShadow = "0 0 20px rgba(245, 158, 11, 0.4)";
+      };
+      img.onclick = (e) => {
+        e.stopPropagation();
+        setLightboxSrc(img.src);
+      };
+    });
 
     // Find all PRE elements that haven't been processed
     const preElements = containerRef.current.querySelectorAll("pre");
@@ -46,7 +95,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 
       const copyBtn = document.createElement("button");
       copyBtn.className =
-        "flex items-center gap-1.5 hover:text-blue-600 hover:bg-white px-2 py-1 rounded transition-all cursor-pointer border border-transparent hover:border-gray-200";
+        "flex items-center gap-1.5 hover:text-amber-600 hover:bg-white px-2 py-1 rounded transition-all cursor-pointer border border-transparent hover:border-gray-200";
       copyBtn.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
         <span>复制</span>
@@ -101,7 +150,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 
         const expandBtn = document.createElement("button");
         expandBtn.className =
-          "px-4 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 text-xs font-semibold rounded-full shadow-sm border border-blue-200 transition-colors flex items-center gap-1 cursor-pointer";
+          "px-4 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-600 text-xs font-semibold rounded-full shadow-sm border border-amber-200 transition-colors flex items-center gap-1 cursor-pointer";
         expandBtn.innerHTML = `
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
             展开全部代码
@@ -141,10 +190,49 @@ export default function MarkdownContent({ content }: { content: string }) {
   }, [content]);
 
   return (
-    <div
-      ref={containerRef}
-      className="prose-fomal"
-      dangerouslySetInnerHTML={{ __html: content }}
-    />
+    <>
+      <div
+        ref={containerRef}
+        className="prose-fomal"
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+      {lightboxSrc &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm animate-in fade-in duration-300"
+            onClick={closeLightbox}
+          >
+            <img
+              src={lightboxSrc}
+              className="max-w-[95vw] max-h-[95vh] rounded-lg shadow-2xl object-contain cursor-zoom-out animate-in zoom-in-95 duration-300 drop-shadow-2xl"
+              alt="Full screen view"
+            />
+            <button
+              onClick={closeLightbox}
+              className="absolute top-6 right-6 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full backdrop-blur-md transition-all"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50 text-sm font-medium tracking-wide">
+              点击任意处关闭
+            </div>
+          </div>,
+          document.body
+        )}
+    </>
   );
 }

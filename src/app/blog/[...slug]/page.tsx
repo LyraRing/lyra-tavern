@@ -115,7 +115,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </div>
 
       <div className="container mx-auto px-4 py-8 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
           {/* Main Content */}
           <article className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-10">
             <MarkdownContent content={post.content} />

@@ -14,7 +14,7 @@ export default function HomeFooter() {
           © {yearString} {siteConfig.author}.{" "}
           <a
             href={siteConfig.links.github}
-            className="hover:text-blue-600 transition-colors"
+            className="hover:text-amber-600 transition-colors"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -22,11 +22,11 @@ export default function HomeFooter() {
           </a>
         </div>
         <div>
-          <a href="/about" className="hover:text-blue-600">
+          <a href="/about" className="hover:text-amber-600">
             关于本站
           </a>
           <span className="mx-2">|</span>
-          <a href="/guestbook" className="hover:text-blue-600">
+          <a href="/guestbook" className="hover:text-amber-600">
             留言板
           </a>
         </div>

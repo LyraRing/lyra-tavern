@@ -8,10 +8,10 @@ export default function BlogUp() {
         我会在这里记录学习笔记、项目进展与一些随想。
       </p>
       <div className="flex flex-wrap gap-3 pt-1">
-        <Link href="/about" className="text-blue-600 hover:underline">
+        <Link href="/about" className="text-amber-600 hover:underline">
           关于我
         </Link>
-        <Link href="/" className="text-blue-600 hover:underline">
+        <Link href="/" className="text-amber-600 hover:underline">
           返回主页
         </Link>
       </div>
