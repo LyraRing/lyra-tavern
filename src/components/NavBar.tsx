@@ -72,9 +72,7 @@ export default function NavBar() {
             className="hidden md:flex items-center space-x-1"
             aria-label="主导航"
           >
-            <div className="mr-2">
-              <Search />
-            </div>
+            <div className="mr-2">{/* <Search /> */}</div>
             {navItems.map((item) => (
               <div
                 key={item.label}

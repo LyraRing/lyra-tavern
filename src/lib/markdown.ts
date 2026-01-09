@@ -15,14 +15,34 @@ import rehypeHighlight from "rehype-highlight"; // 代码高亮
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 
+// Custom plugin to cleanup escaped characters in code blocks
+function remarkUnescapeCode() {
+  return (tree: any) => {
+    const visit = (node: any) => {
+      if (node.type === "inlineCode" || node.type === "code") {
+        if (node.value) {
+          // Fix: Unescape \* which might have been incorrectly escaped in source
+          node.value = node.value.replace(/\\\*/g, "*");
+        }
+      }
+      if (node.children) {
+        node.children.forEach(visit);
+      }
+    };
+    visit(tree);
+  };
+}
+
 // 定义内容项的类型
 export interface ContentItem {
   slug: string; // 文件名（不含扩展名）
   title: string;
   date: string;
+  lastUpdated: string; // From file mtime
   description: string;
   tags: string[];
-  category?: string;
+  category?: string; // Deprecated single category
+  categories?: string[][]; // Multi-level categories: [['Level1', 'Level2'], ['Another1']]
   collection?: string; // 合集 Key
   order?: number; // 合集内的序号
 
@@ -95,6 +115,7 @@ async function parseMarkdownFile(
   filePath: string,
   slug: string
 ): Promise<ContentItem> {
+  const fileStats = fs.statSync(filePath);
   const fileContents = fs.readFileSync(filePath, "utf8");
 
   if (!fileContents || !fileContents.trim()) {
@@ -103,8 +124,10 @@ async function parseMarkdownFile(
       slug,
       title: slug,
       date: new Date().toISOString(),
+      lastUpdated: fileStats.mtime.toISOString(),
       description: "",
       tags: [],
+      categories: [],
       wordCount: 0,
       readingTime: 0,
       excerpt: "",
@@ -123,17 +146,37 @@ async function parseMarkdownFile(
   const readingTime = Math.ceil(wordCount / 200);
 
   // 使用 unified 处理 pipeline: markdown -> html
-  const processedContent = await unified()
-    .use(remarkParse) // 解析 markdown
-    .use(remarkGfm) // 支持表格等 GFM 语法
-    .use(remarkMath) // 支持数学公式
-    .use(remarkRehype) // markdown 转 html AST
-    .use(rehypeKatex) // 渲染数学公式
-    .use(rehypeSlug) // 给 headers 添加 id
-    .use(rehypeAutolinkHeadings, { behavior: "wrap" }) // 添加锚点
-    .use(rehypeHighlight) // 代码高亮
-    .use(rehypeStringify) // 序列化为 HTML 字符串
-    .process(rawContent);
+  let processedContent;
+  try {
+    processedContent = await unified()
+      .use(remarkParse) // 解析 markdown
+      .use(remarkUnescapeCode) // Fix escaped characters in code
+      .use(remarkGfm) // 支持表格等 GFM 语法
+      .use(remarkMath) // 支持数学公式
+      .use(remarkRehype) // markdown 转 html AST
+      .use(rehypeKatex) // 渲染数学公式
+      .use(rehypeSlug) // 给 headers 添加 id
+      .use(rehypeAutolinkHeadings, { behavior: "wrap" }) // 添加锚点
+      .use(rehypeHighlight) // 代码高亮
+      .use(rehypeStringify) // 序列化为 HTML 字符串
+      .process(rawContent);
+  } catch (error) {
+    console.error(`Error processing markdown for ${slug}:`, error);
+    return {
+      slug,
+      title: matterResult.data.title || slug,
+      date: matterResult.data.date || "",
+      lastUpdated: fileStats.mtime.toISOString(),
+      description: "Error processing content",
+      tags: [],
+      categories: [],
+      wordCount: 0,
+      readingTime: 0,
+      excerpt: "",
+      rawContent: rawContent,
+      content: `<p>Error rendering content: ${String(error)}</p>`,
+    };
+  }
 
   const contentHtml = processedContent.toString();
 
@@ -155,9 +198,13 @@ async function parseMarkdownFile(
     slug,
     title: matterResult.data.title || slug,
     date: matterResult.data.date || "",
+    lastUpdated: fileStats.mtime.toISOString(), // Use file modification time
     description: matterResult.data.description || "",
     tags: Array.isArray(matterResult.data.tags) ? matterResult.data.tags : [],
     category: matterResult.data.category,
+    categories: Array.isArray(matterResult.data.categories)
+      ? matterResult.data.categories
+      : [],
 
     wordCount,
     readingTime,

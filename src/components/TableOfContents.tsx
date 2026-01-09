@@ -35,17 +35,17 @@ function buildTocTree(toc: TocItem[]): TocTreeNode[] {
 const TocNode = ({
   node,
   activeId,
-  collapsedIds,
+  expandedIds,
   onToggle,
   onLinkClick,
 }: {
   node: TocTreeNode;
   activeId: string;
-  collapsedIds: Set<string>;
+  expandedIds: Set<string>;
   onToggle: (id: string) => void;
   onLinkClick: (e: React.MouseEvent, id: string) => void;
 }) => {
-  const isCollapsed = collapsedIds.has(node.id);
+  const isExpanded = expandedIds.has(node.id);
   const hasChildren = node.children.length > 0;
   const isActive = activeId === node.id;
 
@@ -80,7 +80,7 @@ const TocNode = ({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className={`transition-transform duration-200 ${
-                  isCollapsed ? "-rotate-90" : "rotate-0"
+                  isExpanded ? "rotate-0" : "-rotate-90"
                 }`}
               >
                 <polyline points="6 9 12 15 18 9"></polyline>
@@ -110,9 +110,9 @@ const TocNode = ({
       {hasChildren && (
         <div
           className={`grid transition-all duration-300 ease-in-out overflow-hidden ${
-            isCollapsed
-              ? "grid-rows-[0fr] opacity-0"
-              : "grid-rows-[1fr] opacity-100"
+            isExpanded
+              ? "grid-rows-[1fr] opacity-100"
+              : "grid-rows-[0fr] opacity-0"
           }`}
         >
           <ul className="overflow-hidden pl-3 ml-2.5 border-l border-gray-100">
@@ -121,7 +121,7 @@ const TocNode = ({
                 key={child.id}
                 node={child}
                 activeId={activeId}
-                collapsedIds={collapsedIds}
+                expandedIds={expandedIds}
                 onToggle={onToggle}
                 onLinkClick={onLinkClick}
               />
@@ -140,24 +140,69 @@ export default function TableOfContents({
   const [activeId, setActiveId] = useState<string>("");
   const [isWidgetCollapsed, setIsWidgetCollapsed] = useState(false);
   const [readingProgress, setReadingProgress] = useState(0);
-  const [collapsedIds, setCollapsedIds] = useState<Set<string>>(new Set());
+  // Default to empty set -> Collapsed by default
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
   // Build the tree only when toc changes
   const tree = useMemo(() => buildTocTree(toc), [toc]);
 
+  // Map to find parents quickly
+  const parentMap = useMemo(() => {
+    const map = new Map<string, string>();
+    const traverse = (nodes: TocTreeNode[], parentId: string | null) => {
+      nodes.forEach((node) => {
+        if (parentId) map.set(node.id, parentId);
+        if (node.children.length > 0) traverse(node.children, node.id);
+      });
+    };
+    traverse(tree, null);
+    return map;
+  }, [tree]);
+
   const toggleSection = (id: string) => {
-    const newSet = new Set(collapsedIds);
+    const newSet = new Set(expandedIds);
     if (newSet.has(id)) {
       newSet.delete(id);
     } else {
       newSet.add(id);
     }
-    setCollapsedIds(newSet);
+    setExpandedIds(newSet);
   };
 
-  // Logic to auto-expand parent of active item?
-  // Optional but good UX. Ideally if I scroll to an item, its parents should open.
-  // For now, let's keep it manual or simple.
+  // Auto-expand parents of active item
+  useEffect(() => {
+    if (!activeId) return;
+
+    setExpandedIds((prev) => {
+      const newSet = new Set(prev);
+      let currentId: string | undefined = activeId;
+      let changed = false;
+
+      // Traverse up and ensure all parents are expanded
+      while (currentId) {
+        const parentId = parentMap.get(currentId);
+        if (parentId) {
+          if (!newSet.has(parentId)) {
+            newSet.add(parentId);
+            changed = true;
+          }
+          currentId = parentId;
+        } else {
+          currentId = undefined;
+        }
+      }
+
+      // Also expand the active item itself if it has children?
+      // Usually, if I am ON a header, I might want to see its sub-headers.
+      // Let's add that logic:
+      // Find node in tree? Too expensive to search every time.
+      // Assuming user wants to see sub-sections of current section.
+      // But if we just expanded parents, we are at least getting there.
+      // Let's stick to expanding parents (breadcrumbs) for now.
+
+      return changed ? newSet : prev;
+    });
+  }, [activeId, parentMap]);
 
   // Reading Progress Listener
   useEffect(() => {
@@ -274,7 +319,7 @@ export default function TableOfContents({
                 key={node.id}
                 node={node}
                 activeId={activeId}
-                collapsedIds={collapsedIds}
+                expandedIds={expandedIds}
                 onToggle={toggleSection}
                 onLinkClick={handleLinkClick}
               />

@@ -47,11 +47,17 @@ export default function Search() {
           return res.text(); // First get text to check validation
         })
         .then((text) => {
-          if (!text || !text.trim()) return []; // Handle empty or whitespace response
+          if (!text || !text.trim()) {
+            return [];
+          }
           try {
             return JSON.parse(text);
           } catch (e) {
-            console.error("Failed to parse search results:", e);
+            console.error(
+              "Search: Invalid JSON response",
+              text.substring(0, 100),
+              e
+            );
             return [];
           }
         })

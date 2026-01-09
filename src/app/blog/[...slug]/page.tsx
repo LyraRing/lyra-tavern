@@ -88,6 +88,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
         <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12 max-w-5xl mx-auto text-white z-10">
           <div className="mb-4">
+            {/* Display Categories */}
+            {post.categories &&
+              post.categories.length > 0 &&
+              post.categories.map((catPath, idx) => (
+                <span
+                  key={idx}
+                  className="inline-block px-3 py-1 bg-amber-500/90 backdrop-blur-sm rounded-md text-xs font-bold mr-2 mb-2 shadow-sm"
+                >
+                  📂 {catPath.join(" / ")}
+                </span>
+              ))}
+
             {post.tags?.map((tag) => (
               <span
                 key={tag}
@@ -124,7 +136,21 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
             {/* Post Footer */}
             <div className="flex justify-between items-center text-gray-500 text-sm">
-              <div>Last updated: {new Date().toLocaleDateString()}</div>
+              <div>
+                最后更新:{" "}
+                <time className="font-medium">
+                  {new Date(post.lastUpdated || post.date).toLocaleString(
+                    "zh-CN",
+                    {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}
+                </time>
+              </div>
             </div>
 
             {/* Post Navigation */}

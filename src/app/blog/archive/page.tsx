@@ -9,32 +9,36 @@ export const metadata = {
 export default async function ArchivePage() {
   const posts = await getAllPosts();
 
-  // Group posts by year
-  const postsByYear = posts.reduce((acc, post) => {
-    const year = new Date(post.date).getFullYear();
-    if (!acc[year]) acc[year] = [];
-    acc[year].push(post);
+  // Group posts by Category
+  const postsByCategory = posts.reduce((acc, post) => {
+    const category = post.category || "未分类";
+    if (!acc[category]) acc[category] = [];
+    acc[category].push(post);
     return acc;
   }, {} as Record<string, typeof posts>);
 
-  const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
+  const categories = Object.keys(postsByCategory).sort((a, b) => {
+    if (a === "未分类") return 1;
+    if (b === "未分类") return -1;
+    return a.localeCompare(b, "zh-CN");
+  });
 
   return (
     <div className="container mx-auto px-4 py-16 max-w-4xl">
       <h1 className="text-4xl font-bold text-gray-900 mb-16 text-center">
-        文章归档
+        分类归档
       </h1>
 
       <div className="relative border-l-2 border-dashed border-gray-200 ml-4 md:ml-12 space-y-16">
-        {years.map((year) => (
-          <div key={year} className="relative pl-8 md:pl-12">
-            {/* Year Label */}
-            <div className="absolute -left-[1.35rem] top-0 flex items-center justify-center w-10 h-10 bg-white border-2 border-blue-500 rounded-full text-blue-600 font-bold shadow-sm z-10 pb-1">
-              <span className="text-sm pt-1">{year}</span>
+        {categories.map((category) => (
+          <div key={category} className="relative pl-8 md:pl-12">
+            {/* Category Label */}
+            <div className="absolute -left-[1.35rem] top-0 flex items-center justify-center min-w-[2.5rem] w-auto px-3 h-10 bg-white border-2 border-blue-500 rounded-full text-blue-600 font-bold shadow-sm z-10">
+              <span className="text-sm">{category}</span>
             </div>
 
             <div className="space-y-6 pt-1">
-              {postsByYear[year].map((post) => (
+              {postsByCategory[category].map((post) => (
                 <article
                   key={post.slug}
                   className="group relative flex items-start gap-4"
@@ -52,6 +56,7 @@ export default async function ArchivePage() {
                       </h3>
                       <time className="text-sm text-gray-400 font-mono shrink-0 bg-gray-50 px-2 py-1 rounded">
                         {new Date(post.date).toLocaleDateString("zh-CN", {
+                          year: "numeric",
                           month: "2-digit",
                           day: "2-digit",
                         })}

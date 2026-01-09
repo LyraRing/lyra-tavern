@@ -235,6 +235,16 @@ body {
     content: none !important;
   }
 
+  /* CODE BLOCKS - Reset styles to avoid conflicts */
+  .prose-fomal pre {
+    @apply !bg-transparent !p-0 !m-0 !border-none !shadow-none !text-gray-800;
+  }
+  .prose-fomal pre code {
+    @apply !bg-transparent !p-0 !m-0 !border-none !shadow-none !text-inherit;
+    background-color: transparent !important;
+    font-family: inherit !important;
+  }
+
   /* IMAGES */
   .prose-fomal img {
     @apply rounded-xl shadow-md my-8 w-full h-auto object-center;
