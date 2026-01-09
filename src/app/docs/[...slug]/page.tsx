@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { extractToc } from "@/lib/toc";
 import TableOfContents from "@/components/TableOfContents";
 
-export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 
 export async function generateStaticParams() {

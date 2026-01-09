@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { getAllDocs, ContentItem } from "@/lib/markdown";
 
-export const dynamic = "force-dynamic";
-
 export const metadata = {
   title: "文档中心 | Lyra Tavern",
   description: "Documentation center",

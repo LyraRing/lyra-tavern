@@ -9,7 +9,6 @@ import "katex/dist/katex.min.css"; // Math support check
 import "highlight.js/styles/github.css"; // Code highlighting
 import MarkdownContent from "@/components/MarkdownContent";
 
-export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
